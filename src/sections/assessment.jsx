@@ -4,6 +4,7 @@ import { assessmentQuestions } from "../ constants";
 import Input from "../components/input";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import Confetti from "react-confetti-boom";
 
 export default function Assessment({ setOpenModal }) {
   const [result, setResult] = useState(null);
@@ -172,6 +173,11 @@ export default function Assessment({ setOpenModal }) {
                    : ""
                }, w-32 h-28 shadow-md font-semibold flex flex-col items-center justify-center text-white rounded-lg`}
               >
+                {result.average == 5 && (
+                  <div className=" z-10">
+                    <Confetti mode="boom" particleCount={150} />
+                  </div>
+                )}
                 <span>Your average</span>
                 <span className=" text-5xl font-extrabold">
                   {result.average}
