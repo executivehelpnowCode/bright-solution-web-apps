@@ -11,23 +11,88 @@ import Modal from "./components/modal";
 import Assessment from "./sections/assessment";
 
 function App() {
-  const [inputFilter, setInputFilter] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+  const [filters, setFilters] = useState({
+    search: "",
+    pillar: "",
+    type: "",
+    level: "",
+  });
   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
-    console.log(selectedOption);
-  }, [selectedOption]);
+  // Check if any filter is active
+  const hasActiveFilters = filters.search || filters.pillar || filters.type || filters.level;
 
   const filteredPillars = pillars.filter((pillar) => {
-    const matchesInput = pillar?.title
-      ?.toLowerCase()
-      .includes(inputFilter.toLowerCase());
-    const matchesOption =
-      !selectedOption || pillar?.title?.includes(selectedOption);
+    // If no filters active, show all
+    if (!hasActiveFilters) return true;
 
-    return matchesInput && matchesOption;
+    // Check pillar-level filter
+    if (filters.pillar && pillar.title !== filters.pillar) {
+      return false;
+    }
+
+    // Check search filter against pillar title
+    if (filters.search && !pillar.title.toLowerCase().includes(filters.search.toLowerCase())) {
+      return false;
+    }
+
+    // If type or level filter is active, check subcontents
+    if (filters.type || filters.level) {
+      const hasMatchingSubcontent = pillar.subcontents?.some((subcontent) => {
+        // Check type filter
+        if (filters.type && subcontent.title !== filters.type) {
+          return false;
+        }
+
+        // Check search filter against subcontent title
+        if (filters.search && !subcontent.title.toLowerCase().includes(filters.search.toLowerCase())) {
+          return false;
+        }
+
+        // Check level filter
+        if (filters.level && subcontent.items) {
+          return subcontent.items.some((item) => item.title === filters.level);
+        }
+
+        return true;
+      });
+
+      return hasMatchingSubcontent;
+    }
+
+    return true;
   });
+
+  // Filter subcontents within each pillar
+  const getFilteredSubcontents = (pillar) => {
+    if (!hasActiveFilters) return pillar.subcontents;
+
+    return pillar.subcontents?.filter((subcontent) => {
+      // Check type filter
+      if (filters.type && subcontent.title !== filters.type) {
+        return false;
+      }
+
+      // Check search filter
+      if (filters.search && !subcontent.title.toLowerCase().includes(filters.search.toLowerCase())) {
+        return false;
+      }
+
+      // Check level filter
+      if (filters.level && subcontent.items) {
+        return subcontent.items.some((item) => item.title === filters.level);
+      }
+
+      return true;
+    });
+  };
+
+  // Filter items within subcontents
+  const getFilteredItems = (items) => {
+    if (!filters.level || !items) return items;
+
+    return items.filter((item) => item.title === filters.level);
+  };
 
   useEffect(() => {
     if (openModal) {
@@ -36,7 +101,6 @@ function App() {
       document.body.style.overflow = "";
     }
 
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = "";
     };
@@ -47,11 +111,14 @@ function App() {
       <Hero />
       <div>
         <Filters
-          onInputChange={setInputFilter}
-          onComboboxSelect={setSelectedOption}
+          onFiltersChange={setFilters}
           onFiltersClear={() => {
-            setSelectedOption(""); 
-            setInputFilter("");
+            setFilters({
+              search: "",
+              pillar: "",
+              type: "",
+              level: "",
+            });
           }}
         />
 
@@ -67,6 +134,8 @@ function App() {
             )}
 
             {filteredPillars?.map((pillar) => {
+              const filteredSubcontents = getFilteredSubcontents(pillar);
+
               return (
                 <div className="flex flex-col" key={pillar.id}>
                   <div className="flex flex-col">
@@ -78,7 +147,7 @@ function App() {
 
                   <AnimatePresence>
                     <motion.div
-                      key="ai-readiness"
+                      key={`pillar-${pillar.id}`}
                       initial={{ opacity: 0, y: 100 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{
@@ -89,9 +158,11 @@ function App() {
                       className="flex flex-col sm:flex-row gap-3"
                     >
                       <div className="flex flex-col mt-8 mb-12 w-full">
-                        {pillar?.id === 1 && ( // "AI Readiness: Data & Systems"
+                        {pillar?.id === 1 && (
                           <div className="flex flex-col gap-6">
-                            {pillar?.subcontents?.map((subcontent) => {
+                            {filteredSubcontents?.map((subcontent) => {
+                              const filteredItems = getFilteredItems(subcontent.items);
+                              
                               return (
                                 <Card
                                   key={subcontent.id}
@@ -121,8 +192,8 @@ function App() {
                                   )}
 
                                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                                    {subcontent.items !== 0 &&
-                                      subcontent?.items?.map((item) => {
+                                    {filteredItems?.length > 0 &&
+                                      filteredItems?.map((item) => {
                                         return (
                                           <Card
                                             key={item?.id}
@@ -148,9 +219,10 @@ function App() {
 
                         {pillar?.id === 2 && (
                           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                            {pillar?.subcontents?.map((subcontent) => {
+                            {filteredSubcontents?.map((subcontent) => {
                               return (
                                 <Card
+                                  key={subcontent.id}
                                   icon={
                                     subcontent.icon
                                       ? React.createElement(subcontent.icon, {
@@ -176,34 +248,33 @@ function App() {
                         )}
 
                         {pillar?.id === 3 && (
-                          <>
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                              {pillar?.subcontents?.map((subcontent) => {
-                                return (
-                                  <Card
-                                    icon={
-                                      subcontent.icon
-                                        ? React.createElement(subcontent.icon, {
-                                            className: "w-4 h-4 text-red-900",
-                                          })
-                                        : null
-                                    }
-                                    title={subcontent.title}
-                                    titleColor="text-red-950"
-                                    description={subcontent.description}
-                                    className="flex flex-col justify-between w-full h-full hover:-translate-y-1 hover:shadow-[0px_13px_15px_5px_rgba(0,0,0,0.1)] transition-all duration-200 rounded-xl border border-gray-200 bg-white p-6"
+                          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                            {filteredSubcontents?.map((subcontent) => {
+                              return (
+                                <Card
+                                  key={subcontent.id}
+                                  icon={
+                                    subcontent.icon
+                                      ? React.createElement(subcontent.icon, {
+                                          className: "w-4 h-4 text-red-900",
+                                        })
+                                      : null
+                                  }
+                                  title={subcontent.title}
+                                  titleColor="text-red-950"
+                                  description={subcontent.description}
+                                  className="flex flex-col justify-between w-full h-full hover:-translate-y-1 hover:shadow-[0px_13px_15px_5px_rgba(0,0,0,0.1)] transition-all duration-200 rounded-xl border border-gray-200 bg-white p-6"
+                                >
+                                  <a
+                                    href={subcontent.url}
+                                    className="font-semibold text-red-700 hover:underline"
                                   >
-                                    <a
-                                      href={subcontent.url}
-                                      className="font-semibold text-red-700 hover:underline"
-                                    >
-                                      {subcontent.label}
-                                    </a>
-                                  </Card>
-                                );
-                              })}
-                            </div>
-                          </>
+                                    {subcontent.label}
+                                  </a>
+                                </Card>
+                              );
+                            })}
+                          </div>
                         )}
                       </div>
                     </motion.div>
@@ -220,7 +291,6 @@ function App() {
         </Modal>
       )}
 
-      {/* FOOTER */}
       <div className="flex flex-col items-center justify-center bg-[#6B0000] text-white py-10">
         <p className="text-lg">Bright Solutions • Generative AI Toolkit</p>
       </div>

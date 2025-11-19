@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { pillars } from "../ constants";
 
 export default function Filters({
-  onInputChange = () => {},
-  onComboboxSelect = () => {},
+  onFiltersChange = () => {},
   onFiltersClear = () => {},
 }) {
   const [filterForm, setFilterForm] = useState({
@@ -15,12 +14,18 @@ export default function Filters({
     levels: "",
   });
 
-  // ✅ ADD THESE TWO STATES (TOP PART)
   const [typeOptions, setTypeOptions] = useState([]);
   const [levelOptions, setLevelOptions] = useState([]);
 
+  // Update parent component whenever filters change
   useEffect(() => {
-    console.clear();
+    onFiltersChange({
+      search: filterForm.search,
+      pillar: filterForm.pillars,
+      type: filterForm.types,
+      level: filterForm.levels,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterForm]);
 
   const handleResetFilters = () => {
@@ -31,8 +36,6 @@ export default function Filters({
       types: "",
       levels: "",
     });
-
-    // Reset dropdowns
     setTypeOptions([]);
     setLevelOptions([]);
   };
@@ -45,7 +48,6 @@ export default function Filters({
   return (
     <div className="flex items-center justify-center bg-gray-100 w-full">
       <div className="lg:w-9/12 w-full px-6 flex py-12 mt-6 gap-x-3 gap-y-10 lg:flex-row flex-col">
-
         {/* SEARCH */}
         <Input
           name="search"
@@ -55,7 +57,6 @@ export default function Filters({
           value={filterForm.search || ""}
           onInputChange={(value) => {
             setFilterForm((prev) => ({ ...prev, search: value }));
-            onInputChange(value);
           }}
           onInputClear={handleResetFilters}
         />
@@ -69,13 +70,10 @@ export default function Filters({
           options={pillarOptions || []}
           value={filterForm.pillars || ""}
           onOptionSelect={(option) => {
-
-            // find selected pillar in constants
             const selectedPillar = pillars.find(
               (p) => p.title === option.name
             );
 
-            // load TYPES under this pillar
             setTypeOptions(
               selectedPillar?.subcontents?.map((sub) => ({
                 id: sub.id,
@@ -83,7 +81,6 @@ export default function Filters({
               })) || []
             );
 
-            // reset level options
             setLevelOptions([]);
 
             setFilterForm((prev) => ({
@@ -101,11 +98,10 @@ export default function Filters({
           name="types"
           type="combobox"
           label="Types"
-          options={typeOptions}  // <- UPDATED
+          options={typeOptions}
           placeholder={"All types"}
           value={filterForm.types || ""}
           onOptionSelect={(option) => {
-
             const selectedPillar = pillars.find(
               (p) => p.title === filterForm.pillars
             );
@@ -114,7 +110,6 @@ export default function Filters({
               (t) => t.title === option.name
             );
 
-            // if type contains LEVEL items
             if (selectedType?.items?.length > 0) {
               setLevelOptions(
                 selectedType.items.map((lvl) => ({
@@ -140,7 +135,7 @@ export default function Filters({
           name="levels"
           type="combobox"
           label="Levels"
-          options={levelOptions}   // <- UPDATED
+          options={levelOptions}
           placeholder={"All levels"}
           value={filterForm.levels || ""}
           onOptionSelect={(option) =>
@@ -154,14 +149,11 @@ export default function Filters({
 
         <Button
           className="h-11 text-white"
-          onClick={() => {
-            handleResetFilters();
-          }}
+          onClick={handleResetFilters}
           color="crimson"
         >
           Reset
         </Button>
-
       </div>
     </div>
   );
