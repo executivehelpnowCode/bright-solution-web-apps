@@ -204,13 +204,13 @@ export const pillars = [
         component: true, // 👈 indicates this subcontent uses a component (not a link)
         items: [],
       },
-      {
-        id: 3,
-        title: "Leveled Reports",
-        description: "",
-        // items: leveledReports,
-        items: [],
-      },
+      // {
+      //   id: 3,
+      //   title: "Leveled Reports",
+      //   description: "",
+      //   // items: leveledReports,
+      //   items: [],
+      // },
       {
         id: 4,
         title: "Platform Excellence Committees",
@@ -221,29 +221,29 @@ export const pillars = [
         type: "",
         items: [],
       },
-      {
-        id: 5,
-        title: "",
-        description: "",
-        img: dataStrategy,
-        // title: "Data Strategy Playbook",
-        // description:
-        //   "A practical roadmap for data governance, quality, and interoperability to enable AI at scale.",
-        // img: dataStrategy,
-        href: "",
-        type: "",
-        items: [],
-      },
-      {
-        id: 6,
-        title: "Innovative Engine",
-        description:
-          "Bright Solutions’ methodology for moving from pilots to scalable, measurable outcomes across sites.",
-        img: innovativeEngine,
-        href: "",
-        type: "",
-        items: [],
-      },
+      // {
+      //   id: 5,
+      //   title: "",
+      //   description: "",
+      //   img:"",
+      //   // title: "Data Strategy Playbook",
+      //   // description:
+      //   //   "A practical roadmap for data governance, quality, and interoperability to enable AI at scale.",
+      //   // img: dataStrategy,
+      //   href: "",
+      //   type: "",
+      //   items: [],
+      // },
+      // {
+      //   id: 6,
+      //   title: "Innovative Engine",
+      //   description:
+      //     "Bright Solutions’ methodology for moving from pilots to scalable, measurable outcomes across sites.",
+      //   img: innovativeEngine,
+      //   href: "",
+      //   type: "",
+      //   items: [],
+      // },
       {
         id: 7,
         title: "Innovation Lab",
@@ -263,13 +263,13 @@ export const pillars = [
       "Practical resources for day‑to‑day AI use. Each item links out to its full content.",
     subcontents: generativeAiToolkit,
   },
-  {
-    id: 3,
-    title: "Innovation Roadmap & Strategy",
-    description:
-      "Turn pilots into practice with governance, measurement and culture.",
-    subcontents: innovationRoadmapStrategicPlanning,
-  },
+  // {
+  //   id: 3,
+  //   title: "Innovation Roadmap & Strategy",
+  //   description:
+  //     "Turn pilots into practice with governance, measurement and culture.",
+  //   subcontents: innovationRoadmapStrategicPlanning,
+  // },
 ];
 
 export const assessmentQuestions = [
