@@ -10,6 +10,8 @@ import Modal from "./components/modal";
 import Assessment from "./sections/assessment";
 import { ChevronDown } from "lucide-react";
 import Footer from "./sections/footer";
+import Testimonial from "./components/testimonial";
+import Testimonials from "./sections/testimonials";
 
 function App() {
   const [filters, setFilters] = useState({
@@ -132,6 +134,7 @@ function App() {
     <div>
       <Hero />
       <div>
+        <Testimonials />
         <Filters
           onFiltersChange={setFilters}
           onFiltersClear={() => {
@@ -160,17 +163,16 @@ function App() {
 
               return (
                 <div className="flex flex-col" key={pillar.id}>
-                  {pillar?.id !== 3 ? (
-                    <div className="flex flex-col">
-                      <h2 className="text-3xl font-bold text-red-950">
-                        {pillar?.title}
-                      </h2>
-                      <p className="text-gray-500">{pillar?.description}</p>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-
+                  <div
+                    className={`flex flex-col mb-6 ${
+                      pillar.id != 1 ? "mt-12" : ""
+                    }`}
+                  >
+                    <h2 className="text-3xl font-bold text-red-950">
+                      {pillar?.title}
+                    </h2>
+                    <p className="text-gray-500">{pillar?.description}</p>
+                  </div>
                   <AnimatePresence>
                     <motion.div
                       key={`pillar-${pillar.id}`}
@@ -181,9 +183,9 @@ function App() {
                         delay: 0.12,
                         ease: "easeOut",
                       }}
-                      className="flex flex-col sm:flex-row "
+                      className="flex flex-col sm:flex-row"
                     >
-                      <div className="flex flex-col mt-8 mb-12 w-full">
+                      <div className="flex flex-col w-full">
                         {pillar?.id === 1 && (
                           <div className="flex flex-col gap-6">
                             {filteredSubcontents?.map((subcontent) => {

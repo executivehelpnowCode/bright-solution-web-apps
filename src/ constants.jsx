@@ -15,6 +15,12 @@ import crossFunctionalRoles from "./assets/cross-functional-roles.svg";
 import dataStrategy from "./assets/data-strategy.svg";
 import innovativeEngine from "./assets/innovative-engine.svg";
 import innovativeLab from "./assets/innovative-lab.svg";
+import female1 from "./assets/female1.svg";
+import female2 from "./assets/female2.svg";
+import male1 from "./assets/male1.svg";
+import male2 from "./assets/male2.svg";
+// import male3 from "./assets/male3.svg";
+import female3 from "./assets/female3.svg";
 
 export const leveledReports = [
   {
@@ -309,5 +315,48 @@ export const assessmentQuestions = [
       { id: 4, grade: 4, text: "D. Robust evolving framework" },
       { id: 5, grade: 5, text: "E. Large, secure data hub + AI-ready" },
     ],
+  },
+];
+
+export const userTestimonials = [
+  {
+    id: 1,
+    name: "Maria Santos",
+    avatar: female1,
+    rating: 5,
+    message:
+      "The service exceeded my expectations! Everything was smooth and on time.",
+  },
+  {
+    id: 2,
+    name: "John Rivera",
+    avatar: male1,
+    rating: 4,
+    message:
+      "Amazing experience. The team was very professional and helpful throughout the process.",
+  },
+  {
+    id: 3,
+    name: "Alyssa Tan",
+    avatar: female2,
+    rating: 2.5,
+    message:
+      "I highly recommend them. Customer support was responsive and friendly.",
+  },
+  {
+    id: 4,
+    name: "Kevin Dela Cruz",
+    avatar: male2,
+    rating: 1,
+    message:
+      "Smooth transaction from start to finish. Will definitely book again!",
+  },
+  {
+    id: 5,
+    name: "Sarah Lim",
+    avatar: female3,
+    rating: 3,
+    message:
+      "Great value and reliable service. My items arrived earlier than expected.",
   },
 ];
