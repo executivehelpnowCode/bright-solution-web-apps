@@ -210,13 +210,12 @@ export const pillars = [
         component: true, // 👈 indicates this subcontent uses a component (not a link)
         items: [],
       },
-      // {
-      //   id: 3,
-      //   title: "Leveled Reports",
-      //   description: "",
-      //   // items: leveledReports,
-      //   items: [],
-      // },
+      {
+        id: 3,
+        title: "Leveled Reports",
+        description: "",
+        items: leveledReports,
+      },
       {
         id: 4,
         title: "Platform Excellence Committees",

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Button from "../components/button";
-import { assessmentQuestions } from "../ constants";
+import { assessmentQuestions } from "../constants";
 import Input from "../components/input";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";

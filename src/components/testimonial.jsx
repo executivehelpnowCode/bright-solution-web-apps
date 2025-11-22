@@ -1,8 +1,6 @@
-import { useState } from "react";
 import Star from "../assets/star.svg";
 
 export default function Testimonial({ id, name, avatar, message, rating }) {
-  const [active, setActive] = useState(false);
   const renderStars = (rating) => {
     return (
       <div className="flex">
@@ -26,9 +24,7 @@ export default function Testimonial({ id, name, avatar, message, rating }) {
     <div
       id={id}
       //   onClick={() => setActive(true)}
-      className={`${
-        active ? "scale-125 z-50" : "scale-100"
-      } transition-all duration-500 cursor-pointer bg-white gap-3 relative p-4 w-full border-2 shadow-md rounded-2xl flex items-center flex-col justify-center`}
+      className={`transition-all duration-500 cursor-pointer bg-white gap-3 relative p-4 w-full border-2 shadow-md rounded-2xl flex items-center flex-col justify-center`}
     >
       <img
         src={avatar}
@@ -39,7 +35,7 @@ export default function Testimonial({ id, name, avatar, message, rating }) {
         {renderStars(rating)}
       </div>
       <p className="italic font-extralight flex items-center text-center min-h-[150px]">
-        "{message} Lor"
+        "{message}"
       </p>
       <p className="py-5 w-full flex items-center justify-center">~ {name}</p>
     </div>

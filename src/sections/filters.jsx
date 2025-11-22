@@ -1,7 +1,7 @@
 import Input from "../components/input";
 import Button from "../components/button";
 import { useEffect, useState } from "react";
-import { pillars } from "../ constants";
+import { pillars } from "../constants";
 
 export default function Filters({
   onFiltersChange = () => {},
