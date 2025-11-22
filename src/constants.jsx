@@ -239,16 +239,16 @@ export const pillars = [
       //   type: "",
       //   items: [],
       // },
-      // {
-      //   id: 6,
-      //   title: "Innovative Engine",
-      //   description:
-      //     "Bright Solutions’ methodology for moving from pilots to scalable, measurable outcomes across sites.",
-      //   img: innovativeEngine,
-      //   href: "",
-      //   type: "",
-      //   items: [],
-      // },
+      {
+        id: 6,
+        title: "Innovation Engine",
+        description:
+          "Bright Solutions’ methodology for moving from pilots to scalable, measurable outcomes across sites.",
+        img: innovativeEngine,
+        href: "",
+        type: "",
+        items: [],
+      },
       {
         id: 7,
         title: "Innovation Lab",
