@@ -195,14 +195,18 @@ function App() {
                                   key={subcontent.id}
                                   title={subcontent.title}
                                   description={subcontent.description}
+                                  
                                 >
                                   {subcontent.img && (
                                     <div className="rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
                                       <img
                                         src={subcontent.img}
                                         alt={subcontent.title}
+                                        
                                         className="hover:scale-110 hover:transition-all hover:duration-300 p-6 w-6/12 rounded-lg"
                                       />
+                                      
+                                      
                                     </div>
                                   )}
 

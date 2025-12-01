@@ -9,7 +9,7 @@ import {
   BookOpenCheck,
   BrainCircuit,
 } from "lucide-react";
-import visualOverview from "./assets/visual-overview.svg";
+import visualOverview from "./assets/img/InnovationMaturityScale.png";
 import selfAssessment from "./assets/self-assessment.svg";
 import crossFunctionalRoles from "./assets/cross-functional-roles.svg";
 import dataStrategy from "./assets/data-strategy.svg";
@@ -74,15 +74,15 @@ export const generativeAiToolkit = [
     title: "Beginners’ Safety AI Guide",
     description: "Practical tips for safe, policy-aligned use of AI tools.",
     label: "Open",
-    url: "#2",
+    url: "https://drive.google.com/file/d/1eZUrxA-WH1yqyz4eTxjguAI8crdQK-QX/view?usp=drive_link",
     icon: ShieldCheck,
   },
   {
     id: 3,
-    title: "Generative AI Policy (Template)",
+    title: "AI Use and Security Policy (Template)",
     description: "Customizable policy template for organizations.",
     label: "Open",
-    url: "#3",
+    url: "https://docs.google.com/document/d/1TEy7RC9VXCe6n3oVdWUzXLJwlrXyVDkk/edit?usp=drive_link&ouid=107551734381166809249&rtpof=true&sd=true",
     icon: FileText,
   },
   {
@@ -90,7 +90,7 @@ export const generativeAiToolkit = [
     title: "Staff Training: AI Guidelines (Deck)",
     description: "Onboard teams to responsible AI.",
     label: "Open",
-    url: "#4",
+    url: "https://docs.google.com/presentation/d/1M9AHgIctEl9zTz9fc-4pYubtPoMBiKgk/edit?usp=drive_link&ouid=107551734381166809249&rtpof=true&sd=true",
     icon: GraduationCap,
   },
   {
@@ -98,7 +98,7 @@ export const generativeAiToolkit = [
     title: "Customizing AI: White Paper",
     description: "Tailor AI to workflows without sacrificing safety.",
     label: "Open",
-    url: "#5",
+    url: "https://drive.google.com/file/d/169mPw220AwQlaY6HBcEp3k_u5p-3LoiP/view?usp=sharing",
     icon: Settings,
   },
   {
@@ -106,7 +106,7 @@ export const generativeAiToolkit = [
     title: "AI Style Guide",
     description: "Tone, voice, and formatting for AI-assisted writing.",
     label: "Open",
-    url: "#6",
+    url: "https://drive.google.com/file/d/1rWQC4K4qrJl1Yyd_pme5Wdnnb3qrY7-V/view?usp=sharing",
     icon: Type,
   },
   {
@@ -114,7 +114,7 @@ export const generativeAiToolkit = [
     title: "AI Prompt Guide",
     description: "Reference for crafting effective prompts.",
     label: "Open",
-    url: "#7",
+    url: "https://drive.google.com/file/d/1OjXjLoB82ASPSpYUdLMcbnTkx7OSR9Sz/view?usp=sharing",
     icon: MessageSquare,
   },
   {
@@ -122,7 +122,7 @@ export const generativeAiToolkit = [
     title: "Mini Prompt Workbook (Interactive)",
     description: "Hands-on exercises to level up prompting.",
     label: "Open",
-    url: "#8",
+    url: "https://drive.google.com/file/d/1ZYdPQgGY_z8tkc3-vEIOj13AEuNavQ0N/view?usp=sharing",
     icon: BookOpenCheck,
   },
   {
@@ -130,7 +130,7 @@ export const generativeAiToolkit = [
     title: "AI Prompt Use Cases",
     description: "Curated examples for senior living.",
     label: "Open",
-    url: "#9",
+    url: "https://drive.google.com/file/d/1U8jLjiCKf073isOP8qybNh_9Z0GmSGI3/view?usp=sharing",
     icon: BrainCircuit,
   },
 ];
@@ -196,7 +196,7 @@ export const pillars = [
         href: "",
         type: "",
         label: "View Overview", // 👈 dynamic button label
-        url: "/overview", // 👈 link for button
+        url: "https://drive.google.com/file/d/18SncT2B5sH7klUFvtvViVws5_dgbn6Lb/view", // 👈 link for button
         items: [],
       },
       {
