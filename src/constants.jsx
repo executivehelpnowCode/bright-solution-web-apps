@@ -185,7 +185,7 @@ export const pillars = [
     id: 1,
     title: "AI Readiness: Data & Systems",
     description:
-      "Begin here. Assess your current state, understand the innovation journey, and unlock a tailored pathway before exploring the toolkit.",
+      "Begin here. Assess your current state, understand the innovation journey, and unlock a tailored pathway.",
     subcontents: [
       {
         id: 1,
@@ -212,7 +212,7 @@ export const pillars = [
       },
       {
         id: 3,
-        title: "Leveled Reports",
+        title: "Assessment Reports",
         description: "",
         items: leveledReports,
       },
