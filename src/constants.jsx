@@ -254,7 +254,8 @@ export const pillars = [
         title: "Innovation Lab",
         description:
           "A sandbox to pilot solutions, test assumptions, and accelerate adoption with real‑world feedback loops.",
-        img: innovativeLab,
+        // img: innovativeLab,       
+       videoUrl: "https://www.youtube.com/embed/Xumm_ZH0Z3c?si=QC2DYVxq-FWz5UjL",
         href: "",
         type: "",
         items: [],
