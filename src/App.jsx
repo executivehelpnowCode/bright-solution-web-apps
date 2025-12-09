@@ -223,6 +223,19 @@ function App() {
                                       />
                                     </div>
                                   )}
+                                  {/* ✅ YOUTUBE VIDEO */}
+{subcontent.videoUrl && (
+  <div className="mt-6 w-full aspect-video rounded-2xl overflow-hidden bg-[#282828]">
+    <iframe
+      src={subcontent.videoUrl}
+      className="w-full h-full"
+      title={subcontent.title}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+  loading="lazy"
+    />
+  </div>
+)}
 
                                   {subcontent?.component && (
                                     <div className="mt-6">
@@ -292,7 +305,7 @@ function App() {
                                     className="font-semibold text-red-700 hover:underline"
                                   >
                                     {subcontent.label}
-                                  </a>
+                                  </a>                                  
                                 </Card>
                               );
                             })}
