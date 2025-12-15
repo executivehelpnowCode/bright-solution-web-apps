@@ -12,6 +12,7 @@ import Footer from "./sections/footer";
 import Testimonials from "./sections/testimonials";
 import { useRef } from "react";
 import Maintenance from "./components/maintinance";
+// import { useTestimonials } from "./useTestimonials";
 
 function App() {
    const isMaintenance = false;
@@ -141,6 +142,8 @@ function App() {
   const scrollToSection = () => {
     sectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  
 
   return (
     <div>
