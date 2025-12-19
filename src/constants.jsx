@@ -202,7 +202,7 @@ export const pillars = [
       },
       {
         id: 2,
-        title: "AI Readiness & Data Maturity Self Assessment",
+        title: "Innovation & AI Readiness Self Assessment",
         description:
           "Gauge your current maturity to unlock a tailored Level 1–5 pathway report.",
         img: selfAssessment,
