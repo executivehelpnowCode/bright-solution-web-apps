@@ -82,7 +82,7 @@ export default function Hero({ onScrollToSection }) {
           </Button>
 
           <Button className="h-12" onClick={onScrollToSection} color="white">
-            Jump to Toolkit Overview
+            Jump to Generative AI Toolkit
           </Button>
         </motion.div>
       </AnimatePresence>
