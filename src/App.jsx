@@ -2,7 +2,7 @@ import "./App.css";
 import Hero from "./sections/hero";
 import Filters from "./sections/filters";
 import { pillars } from "./constants";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import Card from "./components/card";
 import Button from "./components/button";
@@ -10,17 +10,16 @@ import Modal from "./components/modal";
 import Assessment from "./sections/assessment";
 import Footer from "./sections/footer";
 import Testimonials from "./sections/testimonials";
-import { useRef } from "react";
 import Maintenance from "./components/maintinance";
 // import { useTestimonials } from "./useTestimonials";
 
 function App() {
-   const isMaintenance = false;
+  const isMaintenance = false;
 
   if (isMaintenance) {
     return <Maintenance />;
   }
-  
+
   const [filters, setFilters] = useState({
     search: "",
     pillar: "",
@@ -29,8 +28,9 @@ function App() {
   });
   const [openModal, setOpenModal] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState(false);
+  const sectionRef = useRef(null);
 
-  // Accordion on click handler
+  // Accordion on click handler (kept for reference)
   // const handleAccordionClick = () => {
   //   setExpandedAccordion(!expandedAccordion);
   // };
@@ -40,90 +40,73 @@ function App() {
   //   console.log("Accordion is expanded: ", expandedAccordion);
   // }, [expandedAccordion]);
 
-  // Check if any filter is active
-  const hasActiveFilters =
-    filters.search || filters.pillar || filters.type || filters.level;
-
-  const filteredPillars = pillars.filter((pillar) => {
-    // If no filters active, show all
-    if (!hasActiveFilters) return true;
-
-    // Check pillar-level filter
-    if (filters.pillar && pillar.title !== filters.pillar) {
-      return false;
-    }
-
-    // Check search filter against pillar title
-    if (
-      filters.search &&
-      !pillar.title.toLowerCase().includes(filters.search.toLowerCase())
-    ) {
-      return false;
-    }
-
-    // If type or level filter is active, check subcontents
-    if (filters.type || filters.level) {
-      const hasMatchingSubcontent = pillar.subcontents?.some((subcontent) => {
-        // Check type filter
-        if (filters.type && subcontent.title !== filters.type) {
-          return false;
-        }
-
-        // Check search filter against subcontent title
-        if (
-          filters.search &&
-          !subcontent.title.toLowerCase().includes(filters.search.toLowerCase())
-        ) {
-          return false;
-        }
-
-        // Check level filter
-        if (filters.level && subcontent.items) {
-          return subcontent.items.some((item) => item.title === filters.level);
-        }
-
-        return true;
-      });
-
-      return hasMatchingSubcontent;
-    }
-
-    return true;
-  });
-
-  // Filter subcontents within each pillar
-  const getFilteredSubcontents = (pillar) => {
-    if (!hasActiveFilters) return pillar.subcontents;
-
-    return pillar.subcontents?.filter((subcontent) => {
-      // Check type filter
-      if (filters.type && subcontent.title !== filters.type) {
-        return false;
-      }
-
-      // Check search filter
-      if (
-        filters.search &&
-        !subcontent.title.toLowerCase().includes(filters.search.toLowerCase())
-      ) {
-        return false;
-      }
-
-      // Check level filter
-      if (filters.level && subcontent.items) {
-        return subcontent.items.some((item) => item.title === filters.level);
-      }
-
-      return true;
-    });
+  // --- HELPER: Checks if text contains the search term (Case Insensitive) ---
+  const textMatches = (text) => {
+    if (!filters.search) return true; // If no search, everything matches
+    return text?.toLowerCase().includes(filters.search.toLowerCase());
   };
 
-  // Filter items within subcontents
-  const getFilteredItems = (items) => {
-    if (!filters.level || !items) return items;
+  // --- MAIN FILTERING LOGIC (Deep Search) ---
+  // This replaces the old filtering functions to search deeper into nested items
+  const processedPillars = useMemo(() => {
+    if (!pillars) return [];
 
-    return items.filter((item) => item.title === filters.level);
-  };
+    return pillars
+      .map((pillar) => {
+        // 1. Check Pillar Filter
+        if (filters.pillar && pillar.title !== filters.pillar) return null;
+
+        // 2. Filter Subcontents
+        const filteredSubcontents = pillar.subcontents
+          ?.map((subcontent) => {
+            // Check Type Filter
+            if (filters.type && subcontent.title !== filters.type) return null;
+
+            // 3. Filter Items inside Subcontent
+            const filteredItems = subcontent.items?.filter((item) => {
+              // Check Level Filter
+              if (filters.level && item.title !== filters.level) return false;
+
+              // Check Search (Title OR Description)
+              const itemMatchesSearch =
+                textMatches(item.title) || textMatches(item.description);
+
+              return itemMatchesSearch;
+            });
+
+            // 4. Decide if we keep this Subcontent
+            // Keep if: (Subcontent Matches Search) OR (It has matching Children)
+            const subcontentSelfMatches =
+              textMatches(subcontent.title) ||
+              textMatches(subcontent.description);
+
+            const hasMatchingItems = filteredItems && filteredItems.length > 0;
+
+            if (subcontentSelfMatches || hasMatchingItems) {
+              // Return copy with filtered items
+              return { ...subcontent, items: filteredItems };
+            }
+
+            return null;
+          })
+          .filter(Boolean); // Remove nulls
+
+        // 5. Decide if we keep this Pillar
+        // Keep if: (Pillar Matches Search) OR (It has matching Subcontents)
+        const pillarSelfMatches =
+          textMatches(pillar.title) || textMatches(pillar.description);
+
+        const hasMatchingSubcontents =
+          filteredSubcontents && filteredSubcontents.length > 0;
+
+        if (pillarSelfMatches || hasMatchingSubcontents) {
+          return { ...pillar, subcontents: filteredSubcontents };
+        }
+
+        return null;
+      })
+      .filter(Boolean);
+  }, [filters, pillars]); // Only re-run when filters or data change
 
   // Prevent user from scrolling in background while modal is visible
   useEffect(() => {
@@ -137,16 +120,11 @@ function App() {
     };
   }, [openModal]);
 
-  const sectionRef = useRef(null);
-
   const scrollToSection = () => {
     sectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  
-
   return (
-    
     <div>
       <Hero onScrollToSection={scrollToSection} />
       <div>
@@ -168,20 +146,21 @@ function App() {
           className="py-10 flex items-center justify-center lg:px-56 px-6 "
         >
           <div className="w-full">
-            {filteredPillars?.length === 0 && (
+            {processedPillars.length === 0 && (
               <div className="w-full flex items-center justify-center">
                 No matches found.
               </div>
             )}
 
-            {filteredPillars?.map((pillar) => {
-              const filteredSubcontents = getFilteredSubcontents(pillar);
+            {processedPillars.map((pillar) => {
+              // We use the pre-filtered subcontents from useMemo
+              const subcontents = pillar.subcontents;
 
               return (
                 <div className="flex flex-col" key={pillar.id}>
                   <div
                     className={`flex flex-col mb-6 ${
-                      pillar.id != 1 ? "mt-12" : ""
+                      pillar.id !== 1 ? "mt-12" : ""
                     }`}
                   >
                     <h2 className="text-3xl font-bold text-red-950">
@@ -204,10 +183,10 @@ function App() {
                       <div className="flex flex-col w-full">
                         {pillar?.id === 1 && (
                           <div className="flex flex-col gap-6">
-                            {filteredSubcontents?.map((subcontent) => {
-                              const filteredItems = getFilteredItems(
-                                subcontent.items
-                              );
+                            {subcontents?.map((subcontent) => {
+                              // Use the items filtered in useMemo
+                              const items = subcontent.items;
+
                               return (
                                 <Card
                                   key={subcontent.id}
@@ -222,29 +201,30 @@ function App() {
                                         className={`${
                                           subcontent.id === 1
                                             ? "w-full"
-                                            : "w-5/12"
+                                            : "w-12/12"
                                         } hover:scale-110 hover:transition-all hover:duration-300 p-6 rounded-lg`}
                                       />
                                     </div>
                                   )}
                                   {/* ✅ YOUTUBE VIDEO */}
-{subcontent.videoUrl && (
-  <div className="mt-6 w-full aspect-video rounded-2xl overflow-hidden bg-[#282828]">
-    <iframe
-      src={subcontent.videoUrl}
-      className="w-full h-full"
-      title={subcontent.title}
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-  loading="lazy"
-    />
-  </div>
-)}
+                                  {subcontent.videoUrl && (
+                                    <div className="mt-6 w-full aspect-video rounded-2xl overflow-hidden bg-[#282828]">
+                                      <iframe
+                                        src={subcontent.videoUrl}
+                                        className="w-full h-full"
+                                        title={subcontent.title}
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        loading="lazy"
+                                      />
+                                    </div>
+                                  )}
 
                                   {subcontent?.component && (
-                                    <div className="mt-6">
+                                    // ✅ RESPONSIVE BUTTON FIX APPLIED HERE
+                                    <div className="relative z-10 bottom-0 left-0 flex justify-center md:block md:-top-[120px] md:left-[220px]">
                                       <Button
-                                        className="h-12"
+                                        className="h-12 w-full max-w-xs md:w-auto"
                                         onClick={() => setOpenModal(true)}
                                         color="crimson"
                                       >
@@ -254,8 +234,8 @@ function App() {
                                   )}
 
                                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                                    {filteredItems?.length > 0 &&
-                                      filteredItems?.map((item) => {
+                                    {items?.length > 0 &&
+                                      items?.map((item) => {
                                         return (
                                           <Card
                                             key={item?.id}
@@ -286,7 +266,7 @@ function App() {
                             className="grid grid-cols-1 lg:grid-cols-3 gap-4"
                             ref={sectionRef}
                           >
-                            {filteredSubcontents?.map((subcontent) => {
+                            {subcontents?.map((subcontent) => {
                               return (
                                 <Card
                                   key={subcontent.id}
@@ -309,88 +289,89 @@ function App() {
                                     className="font-semibold text-red-700 hover:underline"
                                   >
                                     {subcontent.label}
-                                  </a>                                  
+                                  </a>
                                 </Card>
                               );
                             })}
                           </div>
                         )}
-                        {/* 
-                        {pillar?.id === 3 && (
-                          <div
-                            className={`-mt-12 p-4 border-2 rounded-xl shadow-sm ${
-                              expandedAccordion ? "" : "hover:bg-gray-100"
-                            } `}
-                          >
-                            <div
-                              onClick={handleAccordionClick}
-                              className={`flex justify-between items-center cursor-pointer ${
-                                expandedAccordion ? "mb-6 " : ""
-                              }`}
-                            >
-                              <div className="flex flex-col">
-                                <h2 className="text-3xl font-bold text-red-950">
-                                  {pillar?.title}
-                                </h2>
-                                <p className="text-gray-500">
-                                  {pillar?.description}
-                                </p>
-                              </div>
-                              <ChevronDown
-                                size={48}
-                                className={`${
-                                  expandedAccordion ? "-rotate-180 " : ""
-                                } ml-2 transition-all duration-500 cursor-pointer text-red-950`}
-                              />
-                            </div>
-                            {expandedAccordion && (
-                              <AnimatePresence>
-                                <motion.div
-                                  key={`pillar-${pillar.id}`}
-                                  initial={{ opacity: 0, y: -20 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{
-                                    duration: 0.3,
-                                    ease: "easeOut",
-                                  }}
-                                  className="flex flex-col sm:flex-row"
-                                >
-                                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full">
-                                    {filteredSubcontents?.map((subcontent) => {
-                                      return (
-                                        <Card
-                                          key={subcontent.id}
-                                          icon={
-                                            subcontent.icon
-                                              ? React.createElement(
-                                                  subcontent.icon,
-                                                  {
-                                                    className:
-                                                      "w-4 h-4 text-red-900",
-                                                  }
-                                                )
-                                              : null
-                                          }
-                                          title={subcontent.title}
-                                          titleColor="text-red-950"
-                                          description={subcontent.description}
-                                          className="flex flex-col justify-between w-full h-full hover:-translate-y-1 hover:shadow-[0px_13px_15px_5px_rgba(0,0,0,0.1)] transition-all duration-200 rounded-xl border border-gray-200 bg-white p-6"
-                                        >
-                                          <a
-                                            href={subcontent.url}
-                                            className="font-semibold text-red-700 hover:underline"
-                                          >
-                                            {subcontent.label}
-                                          </a>
-                                        </Card>
-                                      );
-                                    })}
-                                  </div>
-                                </motion.div>
-                              </AnimatePresence>
-                            )}
-                          </div>
-                        )} */}
+
+                        {/* {pillar?.id === 3 && (
+                           <div
+                             className={`-mt-12 p-4 border-2 rounded-xl shadow-sm ${
+                               expandedAccordion ? "" : "hover:bg-gray-100"
+                             } `}
+                           >
+                             <div
+                               onClick={handleAccordionClick}
+                               className={`flex justify-between items-center cursor-pointer ${
+                                 expandedAccordion ? "mb-6 " : ""
+                               }`}
+                             >
+                               <div className="flex flex-col">
+                                 <h2 className="text-3xl font-bold text-red-950">
+                                   {pillar?.title}
+                                 </h2>
+                                 <p className="text-gray-500">
+                                   {pillar?.description}
+                                 </p>
+                               </div>
+                               <ChevronDown
+                                 size={48}
+                                 className={`${
+                                   expandedAccordion ? "-rotate-180 " : ""
+                                 } ml-2 transition-all duration-500 cursor-pointer text-red-950`}
+                               />
+                             </div>
+                             {expandedAccordion && (
+                               <AnimatePresence>
+                                 <motion.div
+                                   key={`pillar-${pillar.id}`}
+                                   initial={{ opacity: 0, y: -20 }}
+                                   animate={{ opacity: 1, y: 0 }}
+                                   transition={{
+                                     duration: 0.3,
+                                     ease: "easeOut",
+                                   }}
+                                   className="flex flex-col sm:flex-row"
+                                 >
+                                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full">
+                                     {subcontents?.map((subcontent) => {
+                                       return (
+                                         <Card
+                                           key={subcontent.id}
+                                           icon={
+                                             subcontent.icon
+                                               ? React.createElement(
+                                                   subcontent.icon,
+                                                   {
+                                                     className:
+                                                       "w-4 h-4 text-red-900",
+                                                   }
+                                                 )
+                                               : null
+                                           }
+                                           title={subcontent.title}
+                                           titleColor="text-red-950"
+                                           description={subcontent.description}
+                                           className="flex flex-col justify-between w-full h-full hover:-translate-y-1 hover:shadow-[0px_13px_15px_5px_rgba(0,0,0,0.1)] transition-all duration-200 rounded-xl border border-gray-200 bg-white p-6"
+                                         >
+                                           <a
+                                             href={subcontent.url}
+                                             className="font-semibold text-red-700 hover:underline"
+                                           >
+                                             {subcontent.label}
+                                           </a>
+                                         </Card>
+                                       );
+                                     })}
+                                   </div>
+                                 </motion.div>
+                               </AnimatePresence>
+                             )}
+                           </div>
+                         )} 
+                        */}
                       </div>
                     </motion.div>
                   </AnimatePresence>
@@ -407,18 +388,17 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
           className="bg-crimson-900 hover:bg-crimson-1000
-                     text-white text-sm font-medium
-                     px-3 py-2
-                     rounded-l-lg
-                     shadow-lg
-                     flex items-center justify-center"
+                      text-white text-sm font-medium
+                      px-3 py-2
+                      rounded-l-lg
+                      shadow-lg
+                      flex items-center justify-center"
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
           Feedback
         </a>
       </div>
-      
-      
+
       {openModal && (
         <Modal>
           <Assessment setOpenModal={() => setOpenModal(false)} />

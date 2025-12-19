@@ -10,7 +10,8 @@ import {
   BrainCircuit,
 } from "lucide-react";
 import visualOverview from "./assets/img/InnovationMaturityScale.png";
-import selfAssessment from "./assets/self-assessment.svg";
+import selfAssessment from "./assets/img/aireadiness.png";
+// import selfAssessment from "./assets/self-assessment.svg";
 import crossFunctionalRoles from "./assets/cross-functional-roles.svg";
 import dataStrategy from "./assets/data-strategy.svg";
 import innovativeEngine from "./assets/innovative-engine.svg";
