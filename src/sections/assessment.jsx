@@ -40,23 +40,28 @@ export default function Assessment({ setOpenModal }) {
     if (avg >= 1 && avg < 2) {
       innovation = "Level 1: Basic Digital";
       ai = "Exploring";
-      fileUrl = "https://drive.google.com/file/d/1SY29fuOoML7tpy07oqWEeeJR6Zgsaoyp/view"
+      fileUrl = "https://drive.google.com/uc?export=download&id=1SY29fuOoML7tpy07oqWEeeJR6Zgsaoyp"
+      // fileUrl = "https://drive.google.com/file/d/1SY29fuOoML7tpy07oqWEeeJR6Zgsaoyp/view"
     } else if (avg >= 2 && avg < 3) {
       innovation = "Level 2: Connected";
       ai = "Planning";
-      fileUrl= "https://drive.google.com/file/d/1ltnaVQHgUNAHy_IRrqwUXQ7Uw7B-puLZ/view"
+      fileUrl= "https://drive.google.com/uc?export=download&id=1ltnaVQHgUNAHy_IRrqwUXQ7Uw7B-puLZ"
+      // fileUrl= "https://drive.google.com/file/d/1ltnaVQHgUNAHy_IRrqwUXQ7Uw7B-puLZ/view"
     } else if (avg >= 3 && avg < 4) {
       innovation = "Level 3: Integrated";
       ai = "Implementing";
-      fileUrl= "https://drive.google.com/file/d/12lHO9yoeuK3bg8oYiT7P2ua4ubbQOECH/view"
+      fileUrl= "https://drive.google.com/uc?export=download&id=12lHO9yoeuK3bg8oYiT7P2ua4ubbQOECH"
+      // fileUrl= "https://drive.google.com/file/d/12lHO9yoeuK3bg8oYiT7P2ua4ubbQOECH/view"
     } else if (avg >= 4 && avg < 5) {
       innovation = "Level 4: Intelligence Driven";
       ai = "Scaling";
-      fileUrl= "https://drive.google.com/file/d/1bp9tuPVKmeNOEa6-4WzUgLwOHsPt3VMP/view"
+      fileUrl= "https://drive.google.com/uc?export=download&id=1bp9tuPVKmeNOEa6-4WzUgLwOHsPt3VMP"
+      // fileUrl= "https://drive.google.com/file/d/1bp9tuPVKmeNOEa6-4WzUgLwOHsPt3VMP/view"
     } else if (avg === 5) {
       innovation = "Level 5: Transformed";
       ai = "Embedded";
-      fileUrl= "https://drive.google.com/file/d/1f5hnQgK-ltR8L2TUG7Dg306EBvHUxPtS/view"
+      fileUrl= "https://drive.google.com/uc?export=download&id=1f5hnQgK-ltR8L2TUG7Dg306EBvHUxPtS"
+      // fileUrl= "https://drive.google.com/file/d/1f5hnQgK-ltR8L2TUG7Dg306EBvHUxPtS/view"
     }
 
     setResult({
