@@ -11,6 +11,7 @@ import Assessment from "./sections/assessment";
 import Footer from "./sections/footer";
 import Testimonials from "./sections/testimonials";
 import Maintenance from "./components/maintinance";
+import { logDownloadClick } from "./downloadLogger";
 // import { useTestimonials } from "./useTestimonials";
 
 function App() {
@@ -247,6 +248,12 @@ function App() {
                                               href={item.url}
                                               target="_blank"
                                               rel="noopener noreferrer"
+                                              onClick={() =>
+                                                logDownloadClick({
+                                                  filename: item?.title,
+                                                  source: subcontent?.title,
+                                                })
+                                              }
                                               className="font-semibold text-red-700 hover:underline"
                                             >
                                               {item?.label}
@@ -286,6 +293,12 @@ function App() {
                                     href={subcontent.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    onClick={() =>
+                                      logDownloadClick({
+                                        filename: subcontent?.title,
+                                        source: pillar?.title,
+                                      })
+                                    }
                                     className="font-semibold text-red-700 hover:underline"
                                   >
                                     {subcontent.label}

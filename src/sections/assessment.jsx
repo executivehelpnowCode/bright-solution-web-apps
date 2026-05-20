@@ -5,6 +5,7 @@ import Input from "../components/input";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import Confetti from "react-confetti-boom";
+import { logDownloadClick } from "../downloadLogger";
 
 export default function Assessment({ setOpenModal }) {
   const [result, setResult] = useState(null);
@@ -36,30 +37,36 @@ export default function Assessment({ setOpenModal }) {
     let innovation = "";
     let ai = "";
     let fileUrl = "";
+    let fileName = "";
 
     if (avg >= 1 && avg < 2) {
       innovation = "Level 1: Basic Digital";
       ai = "Exploring";
+      fileName = "Level 1 Report & Pathway";
       fileUrl = "https://drive.google.com/uc?export=download&id=1SY29fuOoML7tpy07oqWEeeJR6Zgsaoyp"
       // fileUrl = "https://drive.google.com/file/d/1SY29fuOoML7tpy07oqWEeeJR6Zgsaoyp/view"
     } else if (avg >= 2 && avg < 3) {
       innovation = "Level 2: Connected";
       ai = "Planning";
+      fileName = "Level 2 Report & Pathway";
       fileUrl= "https://drive.google.com/uc?export=download&id=1ltnaVQHgUNAHy_IRrqwUXQ7Uw7B-puLZ"
       // fileUrl= "https://drive.google.com/file/d/1ltnaVQHgUNAHy_IRrqwUXQ7Uw7B-puLZ/view"
     } else if (avg >= 3 && avg < 4) {
       innovation = "Level 3: Integrated";
       ai = "Implementing";
+      fileName = "Level 3 Report & Pathway";
       fileUrl= "https://drive.google.com/uc?export=download&id=12lHO9yoeuK3bg8oYiT7P2ua4ubbQOECH"
       // fileUrl= "https://drive.google.com/file/d/12lHO9yoeuK3bg8oYiT7P2ua4ubbQOECH/view"
     } else if (avg >= 4 && avg < 5) {
       innovation = "Level 4: Intelligence Driven";
       ai = "Scaling";
+      fileName = "Level 4 Report & Pathway";
       fileUrl= "https://drive.google.com/uc?export=download&id=1bp9tuPVKmeNOEa6-4WzUgLwOHsPt3VMP"
       // fileUrl= "https://drive.google.com/file/d/1bp9tuPVKmeNOEa6-4WzUgLwOHsPt3VMP/view"
     } else if (avg === 5) {
       innovation = "Level 5: Transformed";
       ai = "Embedded";
+      fileName = "Level 5 Report & Pathway";
       fileUrl= "https://drive.google.com/uc?export=download&id=1f5hnQgK-ltR8L2TUG7Dg306EBvHUxPtS"
       // fileUrl= "https://drive.google.com/file/d/1f5hnQgK-ltR8L2TUG7Dg306EBvHUxPtS/view"
     }
@@ -68,6 +75,7 @@ export default function Assessment({ setOpenModal }) {
       average: avg.toFixed(1),
       innovation,
       ai,
+      fileName,
       fileUrl
     });
   };
@@ -168,6 +176,12 @@ export default function Assessment({ setOpenModal }) {
                                     href={result.fileUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    onClick={() =>
+                                      logDownloadClick({
+                                        filename: result.fileName,
+                                        source: "Assessment Result",
+                                      })
+                                    }
                                     className="font-semibold text-red-700 hover:underline mt-3"
                                   >
                                   Download file
