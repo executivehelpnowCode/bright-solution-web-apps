@@ -21,6 +21,10 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Build project
+        # Inject the Apps Script URL from GitHub Repository Secrets so Vite can
+        # expose it at build time as import.meta.env.VITE_DOWNLOAD_LOG_WEB_APP_URL.
+        env:
+          VITE_DOWNLOAD_LOG_WEB_APP_URL: ${{ secrets.VITE_DOWNLOAD_LOG_WEB_APP_URL }}
         run: npm run build
 
       - name: Upload production-ready build files
