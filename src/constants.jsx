@@ -103,26 +103,9 @@ export const generativeAiToolkit = [
     // url: "https://docs.google.com/presentation/d/1M9AHgIctEl9zTz9fc-4pYubtPoMBiKgk/edit?usp=drive_link&ouid=107551734381166809249&rtpof=true&sd=true",
     icon: GraduationCap,
   },
+  
   {
     id: 5,
-    title: "Customizing AI: White Paper",
-    description: "Tailor AI to workflows without sacrificing safety.",
-    label: "Download",
-    url: "https://drive.google.com/uc?export=download&id=169mPw220AwQlaY6HBcEp3k_u5p-3LoiP",
-    // url: "https://drive.google.com/file/d/169mPw220AwQlaY6HBcEp3k_u5p-3LoiP/view?usp=sharing",
-    icon: Settings,
-  },
-  {
-    id: 6,
-    title: "AI Style Guide",
-    description: "Tone, voice, and formatting for AI-assisted writing.",
-    label: "Download",
-    url: "https://drive.google.com/uc?export=download&id=1rWQC4K4qrJl1Yyd_pme5Wdnnb3qrY7-V",
-    // url: "https://drive.google.com/file/d/1rWQC4K4qrJl1Yyd_pme5Wdnnb3qrY7-V/view?usp=sharing",
-    icon: Type,
-  },
-  {
-    id: 7,
     title: "AI Prompt Guide",
     description: "Reference for crafting effective prompts.",
     label: "Download",
@@ -131,7 +114,7 @@ export const generativeAiToolkit = [
     icon: MessageSquare,
   },
   {
-    id: 8,
+    id: 6,
     title: "Mini Prompt Workbook (Interactive)",
     description: "Hands-on exercises to level up prompting.",
     label: "Download",
@@ -140,7 +123,7 @@ export const generativeAiToolkit = [
     icon: BookOpenCheck,
   },
   {
-    id: 9,
+    id: 7,
     title: "AI Prompt Use Cases",
     description: "Curated examples for senior living.",
     label: "Download",
